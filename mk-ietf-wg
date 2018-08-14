@@ -1,0 +1,53 @@
+#! /usr/bin/env python
+"""
+Create an IETF WG organization and infrastructure
+
+Flags:
+    --wg WGNAME
+    --chair GH_ID (can be repeated, must be at least once)
+    --ad GH_ID (can be repeated, must be at least once)
+
+Creates a GitHub organization, ietf-wg-$WGNAME
+
+Populates organization meta-data (URL, mailing list, description, IETF logo,
+what else?)
+
+Creates an "owners" team of the chairs and AD's
+
+Create a wg-materials repo, owned by the "owners" team.
+"""
+
+import getopt, sys
+
+# Set defaults
+WGNAME = None
+CHAIRS = []
+ADS = []
+
+# Parse JCL.
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "hw:c:a:",
+                              ["wg=", "chair=", "ad="])
+except getopt.GetoptError as err:
+    print str(err)
+    raise SystemExit
+for o,a in opts:
+    if o == '-h':
+        print __doc__
+        raise SystemExit
+    if o in ("-w", "-wg"):
+        WGNAME = a
+    elif o in ("-c", "-chair"):
+        CHAIRS += [ a ]
+    elif o in ("-a", "-ad"):
+        ADS += [ a ]
+    else:
+        assert False, "Unhandled option"
+
+# Verify flag syntax.
+if not WGNAME:
+    raise SystemExit("-w/--wg flag required")
+if len(CHAIRS) == 0:
+    raise SystemExit("-c/--chair flag required")
+if len(ADS) == 0:
+    raise SystemExit( "-a/--ad flag required")
