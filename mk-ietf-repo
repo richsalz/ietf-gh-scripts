@@ -38,11 +38,11 @@ for o,a in opts:
     if o == '-h':
         print __doc__
         raise SystemExit
-    if o in ("-w", "-wg"):
+    if o in ("-w", "--wg"):
         WGNAME = a
-    elif o in ("-d", "-doc"):
+    elif o in ("-d", "--doc"):
         DOCNAME = a
-    elif o in ("-e", "-editor"):
+    elif o in ("-e", "--editor"):
         EDITOR += [ a ]
     else:
         assert False, "Unhandled option"
