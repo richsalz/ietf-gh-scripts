@@ -30,12 +30,14 @@ NAMEPASS = None
 # Parse JCL.
 try:
     opts, args = getopt.getopt(sys.argv[1:], "hw:c:a:n:",
-                              ["wg=", "chair=", "ad=", "np="])
+                              ["help", "wg=", "chair=", "ad=", "np="])
 except getopt.GetoptError as err:
     print str(err)
     raise SystemExit
+if args or len(args) != 0:
+    raise SystemExit("Usage error; try --help for help");
 for o,a in opts:
-    if o == '-h':
+    if o == ('-h', '--help'):
         print __doc__
         raise SystemExit
     if o in ("-w", "--wg"):
