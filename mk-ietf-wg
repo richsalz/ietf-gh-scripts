@@ -6,6 +6,7 @@ Flags:
     --wg WGNAME
     --chair GH_ID (can be repeated, must be at least once)
     --ad GH_ID (can be repeated, must be at least once)
+    --n name:pass Github login credentials
 
 Creates a GitHub organization, ietf-wg-$WGNAME
 
@@ -24,11 +25,12 @@ import ietf_gh_utils as UTILS
 WGNAME = None
 CHAIRS = []
 ADS = []
+NAMEPASS = None
 
 # Parse JCL.
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hw:c:a:",
-                              ["wg=", "chair=", "ad="])
+    opts, args = getopt.getopt(sys.argv[1:], "hw:c:a:n:",
+                              ["wg=", "chair=", "ad=", "np="])
 except getopt.GetoptError as err:
     print str(err)
     raise SystemExit
@@ -42,10 +44,12 @@ for o,a in opts:
         CHAIRS += [ a ]
     elif o in ("-a", "--ad"):
         ADS += [ a ]
+    elif o in ("-n", "--np"):
+        NAMEPASS = a
     else:
-        assert False, "Unhandled option"
+        assert False, "Unhandled option: " + o
 
-# Verify flag syntax.
+# Verify some things, like flag usage.
 if not WGNAME:
     raise SystemExit("-w/--wg flag required")
 if len(CHAIRS) == 0:
@@ -54,10 +58,36 @@ if len(ADS) == 0:
     raise SystemExit( "-a/--ad flag required")
 
 # Login
-G = None
+G,USER = UTILS.gh_login(NAMEPASS)
 
 # Verify user names
 if not UTILS.verify_users(G, CHAIRS) or not UTILS.verify_users(G, ADS):
     raise SystemExit("Missing GH accounts");
 
-# See if repo exists.
+# See if organization exists.
+WGNAME = UTILS.fix_wg_name(WGNAME)
+ORG = 'ietf-wg-' + WGNAME
+if not UTILS.org_exists(G, ORG):
+    text = open("wg-doc.txt").read()
+    print text % vars()
+    raise SystemExit
+
+# Populate some organization meta-data
+o = G.get_organization(ORG)
+o.edit(
+    company = "Internet Engineering Task Force",
+    description = "The " + WGNAME + " working group",
+    email = WGNAME + "@ietf.org"
+    )
+
+# Creates an "owners" team of the chairs and AD's
+owners = o.create_team("owners")
+owners.add_membership(USER)
+for m in ADS:
+    owners.add_membership(m)
+
+# Create a wg-materials repo, owned by the "owners" team.
+o.create_repo("wg-materials",
+        description="Repository for meeting materials",
+        has_issues=True, # Probably the default, but this is funny
+        team_id=owners.id)

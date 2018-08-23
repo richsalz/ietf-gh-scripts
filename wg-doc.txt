@@ -1,0 +1,27 @@
+The organization %(ORG)s doesn't exist; you have to create it.
+The rest of this text walks you through how to do that.
+
+Open a browser window and login to Github. On your home page, there
+is a plus sign in the upper-right corner.  Click it and select
+"New organization" and fill in the following fieldsa:
+    Organization name
+	    ietf-wg-$(WGNAME)s
+    Billing email
+	    Your email address
+    Choose your plan
+	    Use the Free plan
+Click "Create organization" at the bottom of the page.
+
+You'll then get to invite members; skip that and just click "Finish"
+
+Final step is to fill in the meta-data about the project.  Click on the
+"Settings" tab.  You will leave many of these blank as the script
+will then update them.
+    URL
+    	https://datatracker.ietf.org/wg/%(WGNAME)s
+
+You should upload a picture.  Probably by default something like the
+IETF logo.  Github is a square and the logo is rectangular so it's not
+great.  You can use XXXX.gif if you want.  Then click "Update profile."
+
+You can then re-run the script.

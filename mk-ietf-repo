@@ -6,18 +6,10 @@ Flags:
     --wg WGNAME
     --doc DOCNAME (removes /draft-/ /ietf-/ /$WGNAME-/ prefixes; any others?)
     --editor GH_ID (can be repeated, must be at least once)
+    --n name:pass Github login credentials
 
-Creates a repository draft-$WGNAME-$DOCNAME within the ietf-wg-$WGNAME organization.
-
-Creates the common issues "editorial" and "design" (any others, like "parked"?)
-
-Creates a $DOCNAME team within the organization that has the editors and
-owners as members of that repo.  Maybe editors is optional?
-
-Adds Martin's I-D tools as a submodule, runs the initial script to populate
-contributing, etc.
-
-Edits the Makefile as needed, to populate all $WGNAME related URL's
+Creates a repository draft-$WGNAME-$DOCNAME within the ietf-wg-$WGNAME
+organization.  Populates it with various templated stuff.
 """
 
 import getopt, sys
@@ -25,12 +17,13 @@ import getopt, sys
 # Set defaults
 WGNAME = None
 DOCNAME = None
-EDITOR = []
+EDITORS = []
+NAMEPASS = None
 
 # Parse JCL.
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hw:d:e:",
-                              ["wg=", "doc=", "editor="])
+    opts, args = getopt.getopt(sys.argv[1:], "hw:d:e:n:",
+                              ["wg=", "doc=", "editor=", "np="])
 except getopt.GetoptError as err:
     print str(err)
     raise SystemExit
@@ -43,14 +36,51 @@ for o,a in opts:
     elif o in ("-d", "--doc"):
         DOCNAME = a
     elif o in ("-e", "--editor"):
-        EDITOR += [ a ]
+        EDITORS += [ a ]
+    elsif o in ("-n", "--np"):
+        NAMEPASS = a
     else:
-        assert False, "Unhandled option"
+        assert False, "Unhandled option: " + o
 
 # Verify flag syntax.
 if not WGNAME:
     raise SystemExit("-w/--wg flag required")
 if not DOCNAME:
     raise SystemExit("-d/--doc flag required")
-if len(EDITOR) == 0:
+if len(EDITORS) == 0:
     raise SystemExit( "-e/--editor flag required")
+
+# Login
+G,USER = UTILS.gh_login(NAMEPASS)
+
+# Verify user names
+if not UTILS.verify_users(G, EDITORS):
+    raise SystemExit("Missing GH accounts");
+
+# See if organization exists.
+WGNAME = UTILS.fix_wg_name(WGNAME)
+DOC="draft-" + WGNAME + "-" + DOCNAME
+ORG = 'ietf-wg-' + WGNAME
+if not UTILS.org_exists(G, ORG):
+    raise SystemExit("Organization not found; try mk-ietf-wg")
+
+# Create an editors team and populate it
+editors = o.create_team(DOC)
+editors.add_membership(USER)
+for e in EDITORS:
+    editors.add_membership(e)
+
+# Create repository draft-$WGNAME-$DOCNAME in ietf-wg-$WGNAME
+repo = o.create_repo(DOC,
+        description="Repository for " + DOC + " draft",
+        has_issues=True, # Probably the default, but this is funny
+        team_id=editors.id
+        )
+
+# Create common labels
+repo.create_label("editorial", "green")
+repo.create_label("design", "pink")
+repo.create_label("parked", "yellow")
+
+# Add Martin's I-D tools (as a submodule)
+# Run the script to populate CONTRIBUTING etc
