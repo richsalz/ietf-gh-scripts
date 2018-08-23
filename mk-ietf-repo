@@ -13,6 +13,7 @@ organization.  Populates it with various templated stuff.
 """
 
 import getopt, sys
+import ietf_gh_utils as UTILS
 
 # Set defaults
 WGNAME = None
@@ -23,12 +24,14 @@ NAMEPASS = None
 # Parse JCL.
 try:
     opts, args = getopt.getopt(sys.argv[1:], "hw:d:e:n:",
-                              ["wg=", "doc=", "editor=", "np="])
+                              ["help", "wg=", "doc=", "editor=", "np="])
 except getopt.GetoptError as err:
     print str(err)
     raise SystemExit
+if args or len(args) != 0:
+    raise SystemExit("Usage error; try --help for help");
 for o,a in opts:
-    if o == '-h':
+    if o == ('-h', '--help'):
         print __doc__
         raise SystemExit
     if o in ("-w", "--wg"):
@@ -37,7 +40,7 @@ for o,a in opts:
         DOCNAME = a
     elif o in ("-e", "--editor"):
         EDITORS += [ a ]
-    elsif o in ("-n", "--np"):
+    elif o in ("-n", "--np"):
         NAMEPASS = a
     else:
         assert False, "Unhandled option: " + o
@@ -63,6 +66,7 @@ DOC="draft-" + WGNAME + "-" + DOCNAME
 ORG = 'ietf-wg-' + WGNAME
 if not UTILS.org_exists(G, ORG):
     raise SystemExit("Organization not found; try mk-ietf-wg")
+o = G.get_organization(ORG)
 
 # Create an editors team and populate it
 editors = o.create_team(DOC)
@@ -82,5 +86,10 @@ repo.create_label("editorial", "green")
 repo.create_label("design", "pink")
 repo.create_label("parked", "yellow")
 
-# Add Martin's I-D tools (as a submodule)
-# Run the script to populate CONTRIBUTING etc
+print """Run the following commands:
+    git clone https://github.com/%(ORG)s/%(DOC)s
+    cd %(DOC)s
+    git clone https://github.com/martinthomson/i-d-template lib
+    make -f lib/setup.mk
+    git push
+""" % vars()
