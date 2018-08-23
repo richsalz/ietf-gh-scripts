@@ -22,6 +22,7 @@ will then update them.
 
 You should upload a picture.  Probably by default something like the
 IETF logo.  Github is a square and the logo is rectangular so it's not
-great.  You can use XXXX.gif if you want.  Then click "Update profile."
+great.  You can use ietf-logo.jpeg if you want; it's legal use of the
+trademark. Then click "Update profile."
 
-You can then re-run the script.
+You can then re-run this script.
