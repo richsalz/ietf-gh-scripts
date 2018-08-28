@@ -47,11 +47,11 @@ for o,a in opts:
 
 # Verify flag syntax.
 if not WGNAME:
-    raise SystemExit("-w/--wg flag required")
+    raise SystemExit("-w/--wg flag required; use -h for help")
 if not DOCNAME:
-    raise SystemExit("-d/--doc flag required")
+    raise SystemExit("-d/--doc flag required; use -h for help")
 if len(EDITORS) == 0:
-    raise SystemExit( "-e/--editor flag required")
+    raise SystemExit( "-e/--editor flag required; use -h for help")
 
 # Login
 G,USER = UTILS.gh_login(NAMEPASS)

@@ -6,16 +6,7 @@ Flags:
     --wg WGNAME
     --chair GH_ID (can be repeated, must be at least once)
     --ad GH_ID (can be repeated, must be at least once)
-    --n name:pass Github login credentials
-
-Creates a GitHub organization, ietf-wg-$WGNAME
-
-Populates organization meta-data (URL, mailing list, description, IETF logo,
-what else?)
-
-Creates an "owners" team of the chairs and AD's
-
-Create a wg-materials repo, owned by the "owners" team.
+    --np name:pass Github login credentials
 """
 
 import getopt, sys
@@ -53,11 +44,11 @@ for o,a in opts:
 
 # Verify some things, like flag usage.
 if not WGNAME:
-    raise SystemExit("-w/--wg flag required")
+    raise SystemExit("-w/--wg flag required; use -h for help")
 if len(CHAIRS) == 0:
-    raise SystemExit("-c/--chair flag required")
+    raise SystemExit("-c/--chair flag required; use -h for help")
 if len(ADS) == 0:
-    raise SystemExit( "-a/--ad flag required")
+    raise SystemExit( "-a/--ad flag required; use -h for help")
 
 # Login
 G,USER = UTILS.gh_login(NAMEPASS)
