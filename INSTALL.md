@@ -3,7 +3,16 @@ These are python programs; they use PyGitHub which is a Python module
 (library) that provides a Python interface to the GitHub API.
 The home of PyGitHub is https://github.com/PyGithub/PyGithub
 
-The README says that the simplest way to install PyGithub is to do
+There are a couple of ways to add PyGithub to your Python library.  These
+scripts use a bug-fixed version of master which, as of this writing,
+hasn't been released yet.  Assuming new regressions, this method will
+always work:
+
+	git clone git@github.com:PyGithub/PyGithub.git PyGithub
+	cd PyGithub
+	sudo python setup.py install
+
+The PyGithub README says that the simplest way to install is to do:
 
     pip install pygithub
 
@@ -14,7 +23,16 @@ https://pip.readthedocs.io/en/stable/installing/ and did this:
     sudo python get-pip.py 
     sudo pip install pygithub
 
-I am a trusting fellow.  You might want to review get-pip before running it.
+You might want to review get-pip before running it; good luck with that.
 
-OR, you can clone and install PyGitHub yourself, or make it a submodule
-of this repo, or probably something else.
+I am a trusting fellow.
+
+If you have a non-root directory in your PYTHONPATH (ugh, why would you?)
+or you're willing to modify the scripts to update that path, you can
+do the equivalent of this:
+
+	cd PyGithub
+	python seutp.py build
+	export PYTHONPATH=...path.../ietf-gh-scripts/PyGithub/build/lib
+
+There are probably other ways to do it, too.
