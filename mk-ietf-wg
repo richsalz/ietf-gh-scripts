@@ -68,16 +68,19 @@ if not UTILS.org_exists(G, ORG):
 # Populate some organization meta-data
 o = G.get_organization(ORG)
 o.edit(
-    company = "Internet Engineering Task Force",
-    description = "The " + WGNAME + " working group",
-    email = WGNAME + "@ietf.org"
+    company="Internet Engineering Task Force",
+    description="The " + WGNAME + " working group",
+    email=WGNAME + "@ietf.org"
     )
 
 # Creates an "owners" team of the chairs and AD's
-owners = o.create_team("owners")
-owners.add_membership(USER)
-for m in ADS:
-    owners.add_membership(m)
+owners = o.create_team("owners", privacy='closed')
+owners.add_membership(USER, default_repository_permission='maintainer')
+done = [ USER ]
+for m in ADS + CHAIRS:
+    if m not in done:
+        owners.add_membership(m, default_repository_permission='maintainer')
+        done += [ m ]
 
 # Create a wg-materials repo, owned by the "owners" team.
 o.create_repo("wg-materials",

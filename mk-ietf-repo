@@ -7,9 +7,6 @@ Flags:
     --doc DOCNAME (removes /draft-/ /ietf-/ /$WGNAME-/ prefixes; any others?)
     --editor GH_ID (can be repeated, must be at least once)
     --n name:pass Github login credentials
-
-Creates a repository draft-$WGNAME-$DOCNAME within the ietf-wg-$WGNAME
-organization.  Populates it with various templated stuff.
 """
 
 import getopt, sys
