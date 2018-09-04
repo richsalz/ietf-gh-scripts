@@ -5,7 +5,7 @@ The home of PyGitHub is https://github.com/PyGithub/PyGithub
 
 There are a couple of ways to add PyGithub to your Python library.  These
 scripts use a bug-fixed version of master which, as of this writing,
-hasn't been released yet.  Assuming new regressions, this method will
+hasn't been released yet.  Assuming no regressions, this method will
 always work:
 
 	git clone git@github.com:PyGithub/PyGithub.git PyGithub
