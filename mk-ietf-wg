@@ -61,7 +61,7 @@ if not UTILS.verify_users(G, CHAIRS) or not UTILS.verify_users(G, ADS):
 WGNAME = UTILS.fix_wg_name(WGNAME)
 ORG = 'ietf-wg-' + WGNAME
 if not UTILS.org_exists(G, ORG):
-    text = open("wg-doc.txt").read()
+    text = open("creating-org.txt").read()
     print text % vars()
     raise SystemExit
 
