@@ -67,9 +67,12 @@ o = G.get_organization(ORG)
 
 # Create an editors team and populate it
 editors = o.create_team(DOC)
-editors.add_membership(USER)
+editors.add_membership(G.get_user(USER))
+done = [ USER ]
 for e in EDITORS:
-    editors.add_membership(e)
+    if e not in done:
+        editors.add_membership(G.get_user(e))
+        done += [ e ]
 
 # Create repository draft-$WGNAME-$DOCNAME in ietf-wg-$WGNAME
 repo = o.create_repo(DOC,
