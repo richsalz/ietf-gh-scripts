@@ -101,15 +101,42 @@ repo.create_label("editorial", "41d366")
 repo.create_label("design", "1d76db")
 repo.create_label("parked", "f9d0c4")
 
+# Create template files
+with open("CONTRIBUTING.md", "w") as F:
+    text = open("contributing.txt").read()
+    F.write(text % vars())
+with open("draft-ietf-%(WGNAME)s-%(DOCNAME)s.md" % vars(), "w") as F:
+    F.write("""---
+docname: draft-ietf-%(WGNAME)s-%(DOCNAME)s-latest
+title: The %(DOCNAME)s draft
+date: {DATE}
+
+workgroup: %(WGNAME)s
+keyword: Internet-Draft
+
+stand_alone: yes
+pi: [toc, sortrefs, symrefs]
+
+--- abstract
+
+Content here.
+""" % vars())
+
+
 print """Run the following commands:
-    cd ...somewhere else...
     git clone https://github.com/%(ORG)s/%(DOC)s
     cd %(DOC)s
-    echo Empty draft >draft-%(DOC)s.md
+    git remote set-url origin git@github.com:/ietf-wg-%(WGNAME)s/%(DOC)s
+    cp ../CONTRIBUTING.md .
+    git add CONTRIBUTING.md
+    # If you need an empty draft:
+    cp ../draft-ietf-%(WGNAME)s-%(DOCNAME)s.md .
     git add draft-%(DOC)s.md
-    git commit -m 'Empty draft' draft-%(DOC).md
+    git commit -m 'Initial docs' .
     git push
     git clone https://github.com/martinthomson/i-d-template lib
+    # MAKE SURE YOU HAVE kramdown ETC INSTALLED!
+    # (See https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md)
     make -f lib/setup.mk
     git push
 """ % vars()

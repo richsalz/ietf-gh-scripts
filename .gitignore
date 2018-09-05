@@ -1,4 +1,10 @@
 *.pyc
 .*.swp
 PyGithub
+
+# Created template files for repo's
 CONTRIBUTING.md
+
+# Working group repo's
+draft-*/
+draft-ietf-*.md
