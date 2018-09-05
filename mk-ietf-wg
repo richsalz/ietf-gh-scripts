@@ -83,7 +83,20 @@ for m in ADS + CHAIRS:
         done += [ m ]
 
 # Create a wg-materials repo, owned by the "owners" team.
-o.create_repo("wg-materials",
+REPO="wg-materials"
+o.create_repo(REPO,
         description="Repository for meeting materials",
         has_issues=True, # Probably the default, but this is funny
         team_id=owners.id)
+
+with open("CONTRIBUTING.md", "w") as F:
+    text = open("contributing.txt").read()
+    F.write(text % vars())
+
+print """Run the following commands:
+    git clone https://github.com/%(ORG)s/%(REPO)s
+    cd %(REPO)s
+    cp ../CONTRIBUTING.md .
+    git commit -m 'Initial doc' CONTRIBUTING.md
+    git push
+""" % vars()
