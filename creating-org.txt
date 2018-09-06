@@ -20,7 +20,7 @@ will then update them.
     URL
     	https://datatracker.ietf.org/wg/%(WGNAME)s
 
-You should upload a picture.  The file ietf-logo.jpeg is probably a sanctioned
+You should upload a picture.  The file ietf-logo.jpeg is probably an approved
 use of the IETF trademark (we're working to make it officially so).  Click
 "Update profile."  You'll be brought back to the settings page, and you can
 now close the window.
