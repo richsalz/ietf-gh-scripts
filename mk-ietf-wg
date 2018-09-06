@@ -92,6 +92,9 @@ o.create_repo(REPO,
 with open("CONTRIBUTING.md", "w") as F:
     text = open("contributing.txt").read()
     F.write(text % vars())
+with open("WG-README.md", "w") as F:
+    text = open("wg-readme.txt").read()
+    F.write(text % vars())
 
 print """Run the following commands:
     git clone https://github.com/%(ORG)s/%(REPO)s
@@ -99,6 +102,7 @@ print """Run the following commands:
     git remote set-url origin git@github.com:/%(ORG)s/%(REPO)s
     cp ../CONTRIBUTING.md .
     git add CONTRIBUTING.md
-    git commit -m 'Initial doc' .
+    cp ../wg-readme.md README.md
+    git commit -m 'Initial docs' .
     git push
 """ % vars()
