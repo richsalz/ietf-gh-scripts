@@ -78,7 +78,7 @@ if not UTILS.org_exists(G, ORG):
 o = G.get_organization(ORG)
 
 # Create an editors team and populate it
-editors = o.create_team(DOC)
+editors = o.create_team(DOC, privacy='closed')
 editors.add_membership(G.get_user(USER))
 done = [ USER ]
 for e in EDITORS:
@@ -131,7 +131,7 @@ print """Run the following commands:
     git add CONTRIBUTING.md
     # If you need an empty draft:
     cp ../draft-ietf-%(WGNAME)s-%(DOCNAME)s.md .
-    git add draft-%(DOC)s.md
+    git add %(DOC)s.md
     git commit -m 'Initial docs' .
     git push
     git clone https://github.com/martinthomson/i-d-template lib
