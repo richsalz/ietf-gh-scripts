@@ -12,7 +12,10 @@ is a plus sign in the upper-right corner.  Click it and select
 	    Use the Free plan
 Click "Create organization" at the bottom of the page.
 
-You'll then get to invite members; skip that and just click "Finish"
+You'll then get to invite members; skip that by clicking continue.
+
+You will then get asked some questions, you can skip or answer them
+as you see fit.
 
 Final step is to fill in the meta-data about the project.  Click on the
 "Settings" tab.  You will leave many of these blank as the script

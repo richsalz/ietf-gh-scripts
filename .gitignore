@@ -4,7 +4,9 @@ PyGithub
 
 # Created template files for repo's
 CONTRIBUTING.md
+WG-README.md
 
 # Working group repo's
+wg-materials/
 draft-*/
 draft-ietf-*.md
