@@ -28,7 +28,7 @@ except getopt.GetoptError as err:
 if args or len(args) != 0:
     raise SystemExit("Usage error; try --help for help");
 for o,a in opts:
-    if o == ('-h', '--help'):
+    if o in ('-h', '--help'):
         print __doc__
         raise SystemExit
     if o in ("-w", "--wg"):
