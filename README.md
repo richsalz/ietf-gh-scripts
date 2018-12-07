@@ -1,6 +1,11 @@
 # ietf-gh-scripts
 Scripts to create GH repo's for IETF WG's
 
+The IETF had a couple of WG chair sessions on this, a BoF,
+[an I-D](https://datatracker.ietf.org/doc/draft-cooper-wugh-github-wg-configuration/),
+and most recently a draft charter was posted on
+[IETF and GitHub](https://www.ietf.org/mailman/listinfo/Ietf-and-github).
+
 Martin Thomson has some very nice scripts to manage IETF documents via
 GitHub. He's talked about it a couple of times, most recently at the
 WGCHAIRS lunch at IETF 102. At that time, I asked about tools to create
