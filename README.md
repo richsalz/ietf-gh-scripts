@@ -27,6 +27,11 @@ The two main scripts are:
 - mk-ietf-wg Creates an Organization for a working group
 - mk-ietf-draft Creates a repository within an existing org for an I-D
 
+There's also one for individual drafts that creates a repo in the user's
+account:
+
+- mk-ind-draft
+
 If you're not comfortable with building and running these tools, and just want
 to get things set up so that you can use GitHub, that's okay.  Just ask
 someone who is familiar to run the tools for you (and remind them to remove
