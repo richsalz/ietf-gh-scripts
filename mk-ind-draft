@@ -3,7 +3,6 @@
 Create an IETF WG repository for an I-D
 
 Flags:
-    --wg WGNAME
     --doc DOCNAME
     --editor GH_ID (can be repeated, must be at least once)
     --n name:pass Github login credentials
@@ -31,9 +30,7 @@ for o,a in opts:
     if o in ('-h', '--help'):
         print __doc__
         raise SystemExit
-    if o in ("-w", "--wg"):
-        WGNAME = a
-    elif o in ("-d", "--doc"):
+    if o in ("-d", "--doc"):
         DOCNAME = a
     elif o in ("-n", "--np"):
         NAMEPASS = a
