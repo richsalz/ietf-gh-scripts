@@ -3,6 +3,7 @@
 Create an IETF WG repository for an I-D
 
 Flags:
+    --asis Don't try to standardize the name
     --doc DOCNAME
     --editor GH_ID (can be repeated, must be at least once)
     --n name:pass Github login credentials
@@ -16,11 +17,12 @@ WGNAME = None
 DOCNAME = None
 EDITORS = []
 NAMEPASS = None
+ASIS = False
 
 # Parse JCL.
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hd:n:",
-                              ["help", "doc=", "np="])
+    opts, args = getopt.getopt(sys.argv[1:], "ahd:n:",
+                              ["asis", "help", "doc=", "np="])
 except getopt.GetoptError as err:
     print str(err)
     raise SystemExit
@@ -30,7 +32,9 @@ for o,a in opts:
     if o in ('-h', '--help'):
         print __doc__
         raise SystemExit
-    if o in ("-d", "--doc"):
+    if o in ("-a", "--asis"):
+        ASIS = True
+    elif o in ("-d", "--doc"):
         DOCNAME = a
     elif o in ("-n", "--np"):
         NAMEPASS = a
@@ -45,24 +49,23 @@ WGNAME = USER
 EDITORS = [ USER ]
 
 # Verify flag syntax.
-if not WGNAME:
-    raise SystemExit("-w/--wg flag required; use -h for help")
 if not DOCNAME:
     raise SystemExit("-d/--doc flag required; use -h for help")
 if len(EDITORS) == 0:
     raise SystemExit( "-e/--editor flag required; use -h for help")
 
 # Fix doc name: remove draft- ietf- $WGNAME- from front
-while True:
-    for prefix in ( 'draft-', 'ietf-', WGNAME+'-'):
-        found = False
-        if DOCNAME.startswith(prefix):
-            DOCNAME = DOCNAME[len(prefix):]
-            found = True
-    if not found:
-        break
-if len(DOCNAME) == 0:
-    raise SystemExit("Docname is all prefixes!")
+if not ASIS:
+    while True:
+        for prefix in ( 'draft-', 'ietf-', WGNAME+'-'):
+            found = False
+            if DOCNAME.startswith(prefix):
+                DOCNAME = DOCNAME[len(prefix):]
+                found = True
+        if not found:
+            break
+    if len(DOCNAME) == 0:
+        raise SystemExit("Docname is all prefixes!")
 
 # Verify user names
 if not UTILS.verify_users(G, EDITORS):
