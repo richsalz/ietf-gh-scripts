@@ -22,11 +22,10 @@ subject to a Simplified BSD License) in Contributions.
 Discussion of this work occurs on the
 [%(WGNAME)s working group mailing list](https://mailarchive.ietf.org/arch/browse/%(WGNAME)s/)
 ([subscribe](https://www.ietf.org/mailman/listinfo/%(WGNAME)s)).  In addition to
-contributions in github, you are encouraged to participate in discussions there.
+contributions on GitHub, you are encouraged to participate in discussions there.
 
 **Note**: Some working groups adopt a policy whereby substantive discussion of
 technical issues needs to occur on the mailing list.
 
 You might also like to familiarize yourself with other
 [working group documents](https://datatracker.ietf.org/wg/%(WGNAME)s/documents/).
-
