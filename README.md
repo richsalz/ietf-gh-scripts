@@ -14,8 +14,8 @@ and so on -- and therefore volunteered to make said tools.
 
 In the month or so afterwards, there was some useful discussion on the
 WGCHAIRS mailing list and requirements were fleshed out. This repository is
-the result. It's written in Python and uses the awesome Github Python API
-bindings; see BUILD.md for details.
+the result. It's written in Python and uses the awesome GitHub Python API
+bindings; see [BUILD.md](/BUILD.md) for details.
 
 For example, if SLOW is a new IETF working group with a bad-protocol draft,
 this creates a GitHub ietf-wg-slow organization, some groups, and a repository
@@ -24,13 +24,13 @@ integration with Martin's tools, and so on.
 
 The two main scripts are:
 
-- mk-ietf-wg Creates an Organization for a working group
-- mk-ietf-draft Creates a repository within an existing org for an I-D
+- `mk-ietf-wg`: Creates an Organization for a working group
+- `mk-ietf-draft`: Creates a repository within an existing org for an I-D
 
 There's also one for individual drafts that creates a repo in the user's
 account:
 
-- mk-ind-draft
+- `mk-ind-draft`
 
 If you're not comfortable with building and running these tools, and just want
 to get things set up so that you can use GitHub, that's okay.  Just ask
@@ -38,4 +38,3 @@ someone who is familiar to run the tools for you (and remind them to remove
 themselves from the owner group afterwards).
 
 Look at the issues list to see what's missing.  Make pull requests. :)
-
