@@ -20,9 +20,17 @@ def verify_users(g, user):
             raise SystemExit('User "%s" does not exist"' % (u,))
     return 1
 
-def gh_login(np):
-    """Login to Github  |np| is colon-separated name and password, if omitted
+def add_gh_auth_arguments(parser):
+    """Add arguments needed for logging into Github to the
+    argparse.ArgumentParser."""
+    group = parser.add_argument_group('Github Auth')
+    group.add_argument('--np', '-n', metavar='name:pass', required=True,
+                       help="Github login credentials")
+
+def gh_login(args):
+    """Login to Github  |args.np| is colon-separated name and password, if omitted
     either one will be prompted-for.  Returns the handle and the username"""
+    np = args.np
     name = None
     passwd = None
     if np is not None:
