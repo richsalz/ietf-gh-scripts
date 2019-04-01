@@ -1,20 +1,13 @@
 #! /usr/bin/env python
 """
 Create an IETF WG organization and infrastructure
-
-Flags:
-    --wg WGNAME
-    --chair GH_ID (can be repeated, must be at least once)
-    --ad GH_ID (can be repeated, must be at least once)
-    --np name:pass Github login credentials
 """
 
 import argparse, sys
 import ietf_gh_utils as UTILS
 
 # Parse command line.
-parser = argparse.ArgumentParser(
-    description="Create an IETF WG organization and infrastructure")
+parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--wg', '-w', required=True)
 parser.add_argument('--chair', '-c', metavar='GH_ID', action='append', required=True,
                     help="(can be repeated, must be at least once)")

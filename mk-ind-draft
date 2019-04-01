@@ -1,58 +1,28 @@
 #! /usr/bin/env python
 """
 Create an IETF WG repository for an I-D
-
-Flags:
-    --asis Don't try to standardize the name
-    --doc DOCNAME
-    --editor GH_ID (can be repeated, must be at least once)
-    --n name:pass Github login credentials
 """
 
-import getopt, sys
+import argparse, sys
 import ietf_gh_utils as UTILS
 
-# Set defaults
-WGNAME = None
-DOCNAME = None
-EDITORS = []
-NAMEPASS = None
-ASIS = False
+# Parse command line.
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--doc', '-d', metavar='DOCNAME', required=True)
+parser.add_argument('--asis', '-a', action='store_true',
+                    help="Don't try to standardize the name")
+UTILS.add_gh_auth_arguments(parser)
+args = parser.parse_args(sys.argv[1:])
 
-# Parse JCL.
-try:
-    opts, args = getopt.getopt(sys.argv[1:], "ahd:n:",
-                              ["asis", "help", "doc=", "np="])
-except getopt.GetoptError as err:
-    print str(err)
-    raise SystemExit
-if args or len(args) != 0:
-    raise SystemExit("Usage error; try --help for help");
-for o,a in opts:
-    if o in ('-h', '--help'):
-        print __doc__
-        raise SystemExit
-    if o in ("-a", "--asis"):
-        ASIS = True
-    elif o in ("-d", "--doc"):
-        DOCNAME = a
-    elif o in ("-n", "--np"):
-        NAMEPASS = a
-    else:
-        assert False, "Unhandled option: " + o
+DOCNAME = args.doc
+ASIS = args.asis
 
 # Login
-G,USER = UTILS.gh_login(NAMEPASS)
+G,USER = UTILS.gh_login(args)
 
 # For individual draft, the WGNAME is the USER name
 WGNAME = USER
 EDITORS = [ USER ]
-
-# Verify flag syntax.
-if not DOCNAME:
-    raise SystemExit("-d/--doc flag required; use -h for help")
-if len(EDITORS) == 0:
-    raise SystemExit( "-e/--editor flag required; use -h for help")
 
 # Fix doc name: remove draft- ietf- $WGNAME- from front
 if not ASIS:
