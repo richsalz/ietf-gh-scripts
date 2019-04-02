@@ -24,27 +24,34 @@ def add_gh_auth_arguments(parser):
     """Add arguments needed for logging into Github to the
     argparse.ArgumentParser."""
     group = parser.add_argument_group('Github Auth')
-    group.add_argument('--np', '-n', metavar='name:pass', required=True,
-                       help="Github login credentials")
+    group.add_argument('--user', '-u', metavar='GH_ID', required=True,
+                       help="Github username")
+    pw_or_token = group.add_mutually_exclusive_group(required=True)
+    pw_or_token.add_argument('--passwd', '-p',
+                             help="Github password, " +
+                             "if the user doesn't have 2FA enabled")
+    pw_or_token.add_argument('--token', '-t',
+                             help="Github access token: " +
+                             "https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line")
 
 def gh_login(args):
-    """Login to Github  |args.np| is colon-separated name and password, if omitted
-    either one will be prompted-for.  Returns the handle and the username"""
-    np = args.np
-    name = None
-    passwd = None
-    if np is not None:
-        name, passwd = np.split(':', 1)
-    if not name:
-        pass
-    if not passwd:
-        pass
-    g = Github(name, passwd)
+    """Login to Github  |args| is the result of parsing command-line arguments
+    with the parser passed to add_gh_auth_arguments().
+    If both are omitted, username and password will be prompted-for.  Returns
+    the handle and the username"""
+    if args.token is not None:
+        g = Github(args.token)
+    else:
+        if not args.user:
+            pass
+        if not args.passwd:
+            pass
+        g = Github(args.user, args.passwd)
     try:
-        g.get_user(name)
+        g.get_user(args.user)
     except:
         raise SystemExit('Github Login failed')
-    return g, name
+    return g, args.user
 
 def org_exists(g, org):
     """See if |org| organization exists."""
