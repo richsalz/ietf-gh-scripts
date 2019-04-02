@@ -31,7 +31,7 @@ def add_gh_auth_arguments(parser):
                              help="Github password, " +
                              "if the user doesn't have 2FA enabled")
     pw_or_token.add_argument('--token', '-t',
-                             help="Github access token: " +
+                             help="Github access token with the public_repo scope: " +
                              "https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line")
 
 def gh_login(args):
