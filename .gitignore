@@ -2,6 +2,12 @@
 .*.swp
 PyGithub
 
+# Setup artifacts
+build/
+dist/
+ietf_gh_scripts.egg-info/
+ietf_gh_scripts-*/
+
 # Created template files for repo's
 CONTRIBUTING.md
 WG-README.md
