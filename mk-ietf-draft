@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 """
 Create an IETF WG repository for an I-D
 """
@@ -37,7 +37,7 @@ G,USER = UTILS.gh_login(args)
 
 # Verify user names
 if not UTILS.verify_users(G, EDITORS):
-    raise SystemExit("Missing GH accounts");
+    raise SystemExit("Missing GH accounts")
 
 # See if organization exists.
 WGNAME = UTILS.fix_wg_name(WGNAME)
@@ -93,7 +93,7 @@ Content here.
 """ % vars())
 
 
-print """Run the following commands:
+print("""Run the following commands:
     git clone https://github.com/%(ORG)s/%(DOC)s
     cd %(DOC)s
     git remote set-url origin git@github.com:/ietf-wg-%(WGNAME)s/%(DOC)s
@@ -109,4 +109,4 @@ print """Run the following commands:
     # (See https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md)
     make -f lib/setup.mk
     git push
-""" % vars()
+""" % vars())
