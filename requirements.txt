@@ -1,1 +1,2 @@
 PyGithub>=1.43.3
+xml2rfc
