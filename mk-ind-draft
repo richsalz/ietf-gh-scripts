@@ -11,6 +11,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--doc', '-d', metavar='DOCNAME', required=True)
 parser.add_argument('--asis', '-a', action='store_true',
                     help="Don't try to standardize the name")
+parser.add_argument('--default-branch', '-b', action='store', default='master',
+                    help="Name the primary branch in the repository")
 UTILS.add_gh_auth_arguments(parser)
 args = parser.parse_args(sys.argv[1:])
 
@@ -93,18 +95,20 @@ pi: [toc, sortrefs, symrefs]
 Content here.
 """ % vars())
 
+DEFAULT_BRANCH = args.default_branch
 
 print """Run the following commands:
     git clone https://github.com/%(ORG)s/%(DOC)s
     cd %(DOC)s
     git remote set-url origin git@github.com:/%(WGNAME)s/%(DOC)s
+    git checkout --orphan %(DEFAULT_BRANCH)s
     cp ../CONTRIBUTING.md .
     git add CONTRIBUTING.md
     # If you need an empty draft:
     cp ../draft-%(WGNAME)s-%(DOCNAME)s.md .
     git add %(DOC)s.md
     git commit -m 'Initial docs' .
-    git push
+    git push --set-upstream origin %(DEFAULT_BRANCH)s
     git clone https://github.com/martinthomson/i-d-template lib
     # MAKE SURE YOU HAVE kramdown ETC INSTALLED!
     # (See https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md)
