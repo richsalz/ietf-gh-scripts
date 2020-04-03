@@ -88,7 +88,7 @@ initial_files = {}
 initial_files["CONTRIBUTING.md"] = repo_utils.contributing(wgname=WGNAME)
 FULL_DRAFT_NAME = "draft-%(WGNAME)s-%(DOCNAME)s" % vars()
 initial_files[FULL_DRAFT_NAME + ".md"] = repo_utils.initial_draft(
-    full_draft_name=FULL_DRAFT_NAME, docname=DOCNAME, wg=WGNAME)
+    full_draft_name=FULL_DRAFT_NAME, docname=DOCNAME)
 
 repo_utils.clone_and_create_initial_commit(
     user=WGNAME, repo=DOC, default_branch=args.default_branch,
