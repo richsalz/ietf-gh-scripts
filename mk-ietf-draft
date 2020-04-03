@@ -4,7 +4,9 @@ Create an IETF WG repository for an I-D
 """
 
 import argparse
+import os.path
 import sys
+
 import ietf_gh_utils as UTILS
 import repo_utils
 
@@ -19,6 +21,8 @@ parser.add_argument('--default-branch', '-b', action='store', default='master',
                     help="Name the primary branch in the repository")
 UTILS.add_gh_auth_arguments(parser)
 args = parser.parse_args(sys.argv[1:])
+
+repo_utils.check_i_d_tools_are_installed()
 
 WGNAME = args.wg
 DOCNAME = args.doc
@@ -50,6 +54,9 @@ ORG = 'ietf-wg-' + WGNAME
 if not UTILS.org_exists(G, ORG):
     raise SystemExit("Organization not found; try mk-ietf-wg")
 o = G.get_organization(ORG)
+
+if os.path.lexists(DOC):
+    sys.exit("Error: destination path '{}' already exists.".format(DOC))
 
 # Create an editors team and populate it
 editors = o.create_team(DOC, privacy='closed')

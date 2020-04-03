@@ -2,7 +2,9 @@
 
 import os
 import os.path
+import shutil
 import subprocess
+import sys
 from typing import Dict
 
 
@@ -13,6 +15,18 @@ def contributing(*, wgname: str) -> str:
     """Returns the contents of a good CONTRIBUTING.md."""
     text = open(os.path.join(TEMPLATE_DIR, "contributing.txt")).read()
     return text % {"WGNAME": wgname}
+
+
+def check_i_d_tools_are_installed() -> None:
+    """Makes sure any non-Python tools needed to build an I-D are installed.
+
+    Call this early in the main script, before causing side-effects like
+    creating a Github repository, to reduce the chance the user will have to
+    manually undo things because the script failed.
+    """
+    if shutil.which("kramdown-rfc2629") is None:
+        sys.exit("Error: Please install kramdown-rfc2629 as described in " +
+                 "https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md")
 
 
 def clone_and_create_initial_commit(*, user: str, repo: str, default_branch: str = "master", initial_files: Dict[str, str]) -> None:

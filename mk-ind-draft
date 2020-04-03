@@ -4,10 +4,9 @@ Create an IETF WG repository for an I-D
 """
 
 import argparse
-import os
 import os.path
-import shutil
 import sys
+
 import ietf_gh_utils as UTILS
 import repo_utils
 
@@ -21,9 +20,7 @@ parser.add_argument('--default-branch', '-b', action='store', default='master',
 UTILS.add_gh_auth_arguments(parser)
 args = parser.parse_args(sys.argv[1:])
 
-if shutil.which("kramdown-rfc2629") is None:
-    sys.exit("Error: Please install kramdown-rfc2629 as described in " +
-             "https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md")
+repo_utils.check_i_d_tools_are_installed()
 
 DOCNAME = args.doc
 ASIS = args.asis

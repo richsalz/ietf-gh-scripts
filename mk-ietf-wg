@@ -3,7 +3,10 @@
 Create an IETF WG organization and infrastructure
 """
 
-import argparse, sys
+import argparse
+import os.path
+import sys
+
 import ietf_gh_utils as UTILS
 import repo_utils
 
@@ -24,7 +27,7 @@ CHAIRS = args.chair
 ADS = args.ad
 
 # Login
-G,USER = UTILS.gh_login(args)
+G, USER = UTILS.gh_login(args)
 
 # Verify user names
 if not UTILS.verify_users(G, CHAIRS) or not UTILS.verify_users(G, ADS):
@@ -44,23 +47,25 @@ o.edit(
     company="Internet Engineering Task Force",
     description="The " + WGNAME + " working group",
     email=WGNAME + "@ietf.org"
-    )
+)
 
 # Creates an "owners" team of the chairs and AD's
 owners = o.create_team("owners", privacy='closed')
 owners.add_membership(G.get_user(USER))
-done = [ USER ]
+done = [USER]
 for m in ADS + CHAIRS:
     if m not in done:
         owners.add_membership(G.get_user(m))
-        done += [ m ]
+        done += [m]
 
 # Create a wg-materials repo, owned by the "owners" team.
-REPO="wg-materials"
+REPO = "wg-materials"
+if os.path.lexists(REPO):
+    sys.exit("Error: destination path '{}' already exists.".format(REPO))
 o.create_repo(REPO,
-        description="Repository for meeting materials",
-        has_issues=True, # Probably the default, but this is funny
-        team_id=owners.id)
+              description="Repository for meeting materials",
+              has_issues=True,  # Probably the default, but this is funny
+              team_id=owners.id)
 
 initial_files = {}
 initial_files["CONTRIBUTING.md"] = repo_utils.contributing(wgname=WGNAME)
