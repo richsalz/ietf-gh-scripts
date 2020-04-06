@@ -17,6 +17,38 @@ def contributing(*, wgname: str) -> str:
     return text % {"WGNAME": wgname}
 
 
+def initial_draft(*, full_draft_name: str, docname: str, wg: str = None) -> str:
+    """Returns an initial I-D for this repository."""
+    workgroup = ""
+    if wg is not None:
+        workgroup = "workgroup: {}\n".format(wg)
+    template = """---
+docname: {full_draft_name}-latest
+title: The {docname} draft
+category: exp
+{workgroup}
+ipr: trust200902
+
+author:
+  -
+    name: John Doe
+    org: Organization
+    email: user@example.org
+
+stand_alone: yes
+pi: [toc, sortrefs, symrefs]
+
+--- abstract
+
+Content here.
+
+--- middle
+
+# Introduction
+"""
+    return template.format(**vars())
+
+
 def check_i_d_tools_are_installed() -> None:
     """Makes sure any non-Python tools needed to build an I-D are installed.
 
