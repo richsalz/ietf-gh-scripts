@@ -19,6 +19,9 @@ def contributing(*, wgname: str) -> str:
 
 def initial_draft(*, full_draft_name: str, docname: str, wg: str = None) -> str:
     """Returns an initial I-D for this repository."""
+    workgroup = ""
+    if wg is not None:
+        workgroup = "workgroup: {}\n".format(wg)
     template = """---
 docname: {full_draft_name}-latest
 title: The {docname} draft
@@ -43,7 +46,7 @@ Content here.
 
 # Introduction
 """
-    return template.format(workgroup="" if wg is None else "workgroup: {}\n".format(wg), **vars())
+    return template.format(**vars())
 
 
 def check_i_d_tools_are_installed() -> None:
