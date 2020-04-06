@@ -3,8 +3,12 @@
 Create an IETF WG repository for an I-D
 """
 
-import argparse, sys
+import argparse
+import os.path
+import sys
+
 import ietf_gh_utils as UTILS
+import repo_utils
 
 # Parse command line.
 parser = argparse.ArgumentParser(description=__doc__)
@@ -18,13 +22,15 @@ parser.add_argument('--default-branch', '-b', action='store', default='master',
 UTILS.add_gh_auth_arguments(parser)
 args = parser.parse_args(sys.argv[1:])
 
+repo_utils.check_i_d_tools_are_installed()
+
 WGNAME = args.wg
 DOCNAME = args.doc
 EDITORS = args.editor
 
 # Fix doc name: remove draft- ietf- $WGNAME- from front
 while True:
-    for prefix in ( 'draft-', 'ietf-', WGNAME+'-'):
+    for prefix in ('draft-', 'ietf-', WGNAME+'-'):
         found = False
         if DOCNAME.startswith(prefix):
             DOCNAME = DOCNAME[len(prefix):]
@@ -35,7 +41,7 @@ if len(DOCNAME) == 0:
     raise SystemExit("Docname is all prefixes!")
 
 # Login
-G,USER = UTILS.gh_login(args)
+G, USER = UTILS.gh_login(args)
 
 # Verify user names
 if not UTILS.verify_users(G, EDITORS):
@@ -43,28 +49,31 @@ if not UTILS.verify_users(G, EDITORS):
 
 # See if organization exists.
 WGNAME = UTILS.fix_wg_name(WGNAME)
-DOC="draft-" + WGNAME + "-" + DOCNAME
+DOC = "draft-" + WGNAME + "-" + DOCNAME
 ORG = 'ietf-wg-' + WGNAME
 if not UTILS.org_exists(G, ORG):
     raise SystemExit("Organization not found; try mk-ietf-wg")
 o = G.get_organization(ORG)
 
+if os.path.lexists(DOC):
+    sys.exit("Error: destination path '{}' already exists.".format(DOC))
+
 # Create an editors team and populate it
 editors = o.create_team(DOC, privacy='closed')
 editors.add_membership(G.get_user(USER))
-done = [ USER ]
+done = [USER]
 for e in EDITORS:
     if e not in done:
         editors.add_membership(G.get_user(e))
-        done += [ e ]
+        done += [e]
 # Add the "owners" people?
 
 # Create repository draft-$WGNAME-$DOCNAME
 repo = o.create_repo(DOC,
-        description="Repository for " + DOC + " draft",
-        has_issues=True, # Probably the default, but this is funny
-        team_id=editors.id
-        )
+                     description="Repository for " + DOC + " draft",
+                     has_issues=True,  # Probably the default, but this is funny
+                     team_id=editors.id
+                     )
 
 # Remove pre-populated labels, add ours.
 for label in repo.get_labels():
@@ -73,12 +82,9 @@ repo.create_label("editorial", "41d366")
 repo.create_label("design", "1d76db")
 repo.create_label("parked", "f9d0c4")
 
-# Create template files
-with open("CONTRIBUTING.md", "w") as F:
-    text = open("contributing.txt").read()
-    F.write(text % vars())
-with open("draft-ietf-%(WGNAME)s-%(DOCNAME)s.md" % vars(), "w") as F:
-    F.write("""---
+initial_files = dict()
+initial_files["CONTRIBUTING.md"] = repo_utils.contributing(wgname=WGNAME)
+initial_files["draft-ietf-%(WGNAME)s-%(DOCNAME)s.md" % vars()] = """---
 docname: draft-ietf-%(WGNAME)s-%(DOCNAME)s-latest
 title: The %(DOCNAME)s draft
 date: {DATE}
@@ -92,25 +98,9 @@ pi: [toc, sortrefs, symrefs]
 --- abstract
 
 Content here.
-""" % vars())
+""" % vars()
 
-DEFAULT_BRANCH = args.default_branch
-
-print("""Run the following commands:
-    git clone https://github.com/%(ORG)s/%(DOC)s
-    cd %(DOC)s
-    git remote set-url origin git@github.com:/ietf-wg-%(WGNAME)s/%(DOC)s
-    git checkout --orphan %(DEFAULT_BRANCH)s
-    cp ../CONTRIBUTING.md .
-    git add CONTRIBUTING.md
-    # If you need an empty draft:
-    cp ../draft-ietf-%(WGNAME)s-%(DOCNAME)s.md .
-    git add %(DOC)s.md
-    git commit -m 'Initial docs' .
-    git push --set-upstream origin %(DEFAULT_BRANCH)s
-    git clone https://github.com/martinthomson/i-d-template lib
-    # MAKE SURE YOU HAVE kramdown ETC INSTALLED!
-    # (See https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md)
-    make -f lib/setup.mk
-    git push
-""" % vars())
+repo_utils.clone_and_create_initial_commit(
+    user=ORG, repo=DOC, default_branch=args.default_branch,
+    initial_files=initial_files)
+repo_utils.setup_i_d_template()
