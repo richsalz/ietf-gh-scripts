@@ -9,7 +9,7 @@ property policies of IETF currently designated as
 [IETF Trust Legal Provisions (TLP) Relating to IETF Documents](http://trustee.ietf.org/trust-legal-provisions.html).
 
 Any edit, commit, pull request, issue, comment or other change made to this
-repository constitutes Contributions to the IETF Standards Process
+repository is considered to be a "Contributions to the IETF Standards Process"
 (https://www.ietf.org/).
 
 You agree to comply with all applicable IETF policies and procedures, including,
