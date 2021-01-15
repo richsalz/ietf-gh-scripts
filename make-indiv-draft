@@ -54,7 +54,7 @@ WGNAME = UTILS.fix_wg_name(WGNAME)
 DOC = "draft-" + WGNAME + "-" + DOCNAME
 ORG = USER
 # if not UTILS.org_exists(G, ORG):
-#    raise SystemExit("Organization not found; try mk-ietf-wg")
+#    raise SystemExit("Organization not found; try make-ietf-wg")
 # o = G.get_organization(ORG)
 
 # Create an editors team and populate it

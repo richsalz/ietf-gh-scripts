@@ -24,13 +24,13 @@ integration with Martin's tools, and so on.
 
 The two main scripts are:
 
-- `mk-ietf-wg`: Creates an Organization for a working group
-- `mk-ietf-draft`: Creates a repository within an existing org for an I-D
+- `make-ietf-wg`: Creates an Organization for a working group
+- `make-ietf-draft`: Creates a repository within an existing org for an I-D
 
 There's also one for individual drafts that creates a repo in the user's
 account:
 
-- `mk-ind-draft`
+- `make-indiv-draft`
 
 If you're not comfortable with building and running these tools, and just want
 to get things set up so that you can use GitHub, that's okay.  Just ask
